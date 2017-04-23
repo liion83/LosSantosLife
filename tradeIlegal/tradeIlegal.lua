@@ -7,9 +7,9 @@ local DrawMarkerShow = true
 local Price = 1500
 
 local Position = {
-    Recolet={x=-1000.0,y=-3002.0,z=13.0, distance=20}, -- Pick up Position
-    traitement={x=-1078.0,y=-3002.0,z=13.0, distance=20}, -- Rolling Position
-    vente={x=-950.0,y=-3002.0,z=13.0, distance=20} -- Sell Position
+    Recolet={x=-1000.0,y=-3002.0,z=13.0, distance=20},
+    traitement={x=-1078.0,y=-3002.0,z=13.0, distance=20},
+    vente={x=-950.0,y=-3002.0,z=13.0, distance=20}
 }
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
@@ -68,6 +68,7 @@ Citizen.CreateThread(function()
                 TriggerEvent("player:getQuantity", 1, function(data)
                     weedcount = data.count
                 end)
+                Citizen.Wait(1)
                 if weedcount < 30 then
                         ShowMsgtime.msg = '~g~ Pick up ~b~Cannabis'
                         ShowMsgtime.time = 150
@@ -85,14 +86,11 @@ Citizen.CreateThread(function()
         local distanceWeedFarm = GetDistanceBetweenCoords(playerPos.x, playerPos.y, playerPos.z, Position.traitement.x, Position.traitement.y, Position.traitement.z, true)
         if distanceWeedFarm < Position.traitement.distance then
            ShowInfo('~b~Press on ~g~E~b~ for Rolling ~b~Cannabis', 0)
-           local weedcount = 0
-
-           TriggerEvent("player:getQuantity", 1, function(data)
-                weedcount = data.count
-           end)
-
-           Citizen.Trace(weedcount)
            if IsControlJustPressed(1,38) then
+                local weedcount = 0
+                TriggerEvent("player:getQuantity", 1, function(data)
+                     weedcount = data.count
+                end)
                 if weedcount ~= 0 then
                         ShowMsgtime.msg = '~g~ Rolé le ~b~Cannabis'
                         ShowMsgtime.time = 150
@@ -112,12 +110,11 @@ Citizen.CreateThread(function()
         local distanceWeedFarm = GetDistanceBetweenCoords(playerPos.x, playerPos.y, playerPos.z, Position.vente.x, Position.vente.y, Position.vente.z, true)
         if distanceWeedFarm < Position.vente.distance then
            ShowInfo('~b~ Press on ~g~E~b~ for Sell', 0)
-           local weedcount = 0
-           TriggerEvent("player:getQuantity", 3, function(data)
-                weedcount = data.count
-           end)
-           Citizen.Trace(weedcount)
            if IsControlJustPressed(1,38) then
+                local weedcount = 0
+                TriggerEvent("player:getQuantity", 3, function(data)
+                        weedcount = data.count
+                end)
                 if weedcount ~= 0 then
                         ShowMsgtime.msg = '~g~ Sell ~b~Cannabis Rolling'
                         ShowMsgtime.time = 150

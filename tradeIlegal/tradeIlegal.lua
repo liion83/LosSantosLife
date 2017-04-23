@@ -1,4 +1,10 @@
+----------------------------------------------------
+--===================Aurelien=====================--
+----------------------------------------------------
+------------------------Lua-------------------------
+
 local DrawMarkerShow = true
+local DrawBlipTradeShow = true
 
 -- -900.0, -3002.0, 13.0
 -- -800.0, -3002.0, 13.0
@@ -7,7 +13,7 @@ local DrawMarkerShow = true
 local Price = 1500
 
 local Position = {
-    Recolet={x=-1000.0,y=-3002.0,z=13.0, distance=20},
+    Recolet={x=-1000.0,y=-3002.0,z=13.0, distance=20, bli},
     traitement={x=-1078.0,y=-3002.0,z=13.0, distance=20},
     vente={x=-950.0,y=-3002.0,z=13.0, distance=20}
 }
@@ -45,6 +51,13 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+
+    if DrawBlipTradeShow then
+        SetBlipTrade(140, "~g~ Pick up ~b~Cannabis", 2, Position.Recolet.x, Position.Recolet.y, Position.Recolet.z)
+        SetBlipTrade(50, "~g~ Rolling ~b~Cannabis", 1, Position.traitement.x, Position.traitement.y, Position.traitement.z)
+        SetBlipTrade(277, "~g~ Sell ~b~Cannabis", 1, Position.vente.x, Position.vente.y, Position.vente.z)
+    end
+
     while true do
        Citizen.Wait(0)
        if DrawMarkerShow then
@@ -92,7 +105,7 @@ Citizen.CreateThread(function()
                      weedcount = data.count
                 end)
                 if weedcount ~= 0 then
-                        ShowMsgtime.msg = '~g~ Rolé le ~b~Cannabis'
+                        ShowMsgtime.msg = '~g~ Rolling ~b~Cannabis'
                         ShowMsgtime.time = 150
                         Wait(2500)
                         ShowMsgtime.msg = '~g~ + 1 ~b~Cannabis Rolling'
@@ -131,3 +144,14 @@ Citizen.CreateThread(function()
 
     end
 end)
+
+function SetBlipTrade(id, text, color, x, y, z)
+    local Blip = AddBlipForCoord(x, y, z)
+
+    SetBlipSprite(Blip, id)
+    SetBlipColour(Blip, color)
+        
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString(text)
+    EndTextCommandSetBlipName(Blip)
+end
